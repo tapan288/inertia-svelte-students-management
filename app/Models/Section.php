@@ -14,6 +14,10 @@ class Section extends Model
         'name',
     ];
 
+    protected $with = [
+        'class',
+    ];
+
     public function class()
     {
         return $this->belongsTo(Classes::class, 'class_id');
