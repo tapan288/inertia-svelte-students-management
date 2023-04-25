@@ -3,6 +3,7 @@
     import { useForm } from "@inertiajs/svelte";
 
     import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
+    import InputError from "@/Components/InputError.svelte";
 
     let sections;
 
@@ -74,11 +75,7 @@
                                         id="name"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
-                                    {#if $form.errors.name}
-                                        <div class="text-red-500">
-                                            {$form.errors.name}
-                                        </div>
-                                    {/if}
+                                    <InputError message={$form.errors.name} />
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3">
@@ -94,11 +91,7 @@
                                         autocomplete="email"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
-                                    {#if $form.errors.email}
-                                        <div class="text-red-500">
-                                            {$form.errors.email}
-                                        </div>
-                                    {/if}
+                                    <InputError message={$form.errors.email} />
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-4">
@@ -113,11 +106,9 @@
                                         bind:value={$form.phone_number}
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
-                                    {#if $form.errors.phone_number}
-                                        <div class="text-red-500">
-                                            {$form.errors.phone_number}
-                                        </div>
-                                    {/if}
+                                    <InputError
+                                        message={$form.errors.phone_number}
+                                    />
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3">
@@ -138,11 +129,9 @@
                                             </option>
                                         {/each}
                                     </select>
-                                    {#if $form.errors.class_id}
-                                        <div class="text-red-500">
-                                            {$form.errors.class_id}
-                                        </div>
-                                    {/if}
+                                    <InputError
+                                        message={$form.errors.class_id}
+                                    />
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3">
@@ -165,11 +154,9 @@
                                             </option>
                                         {/each}
                                     </select>
-                                    {#if $form.errors.section_id}
-                                        <div class="text-red-500">
-                                            {$form.errors.section_id}
-                                        </div>
-                                    {/if}
+                                    <InputError
+                                        message={$form.errors.section_id}
+                                    />
                                 </div>
                             </div>
                         </div>
