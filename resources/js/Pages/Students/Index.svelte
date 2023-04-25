@@ -1,7 +1,8 @@
 <script>
-    import { Link, useForm } from "@inertiajs/svelte";
+    import { Link, useForm, page } from "@inertiajs/svelte";
 
     import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
+    import AlertComponent from "@/Components/AlertComponent.svelte";
 
     export let students;
 
@@ -39,7 +40,7 @@
                     </div>
                 </div>
                 <div class="mt-8 flex flex-col">
-                    <!-- alerts -->
+                    <AlertComponent message={$page.props.flash.message} />
                     <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div
                             class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
