@@ -1,21 +1,40 @@
 <script>
+    import axios from "axios";
     import { useForm } from "@inertiajs/svelte";
 
     import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
+
+    let sections;
 
     let form = useForm({
         name: null,
         email: null,
         phone_number: null,
-        class_id: 1,
-        section_id: 2,
+        class_id: null,
+        section_id: null,
     });
 
     function submit() {
         $form.post(route("students.store"));
-
-        console.log($form);
     }
+
+    const getSections = (class_id) => {
+        if (class_id) {
+            axios
+                .get(route("sections.index"), {
+                    params: {
+                        class_id: class_id,
+                    },
+                })
+                .then((response) => {
+                    sections = response.data.data;
+                });
+        } else {
+            sections = [];
+        }
+    };
+
+    $: getSections($form.class_id);
 
     export let classes;
 </script>
@@ -55,7 +74,11 @@
                                         id="name"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
-                                    <!-- error -->
+                                    {#if $form.errors.name}
+                                        <div class="text-red-500">
+                                            {$form.errors.name}
+                                        </div>
+                                    {/if}
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3">
@@ -109,7 +132,11 @@
                                         class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     >
                                         <option value="">Select a Class</option>
-                                        <option value="">Class 1</option>
+                                        {#each classes.data as singleClass}
+                                            <option value={singleClass.id}>
+                                                {singleClass.name}
+                                            </option>
+                                        {/each}
                                     </select>
                                     {#if $form.errors.class_id}
                                         <div class="text-red-500">
@@ -132,7 +159,11 @@
                                         <option value=""
                                             >Select a Section</option
                                         >
-                                        <option value="">Section A</option>
+                                        {#each sections as section}
+                                            <option value={section.id}>
+                                                {section.name}
+                                            </option>
+                                        {/each}
                                     </select>
                                     {#if $form.errors.section_id}
                                         <div class="text-red-500">
