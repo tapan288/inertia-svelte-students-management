@@ -1,9 +1,17 @@
 <script>
-    import { Link } from "@inertiajs/svelte";
+    import { Link, useForm } from "@inertiajs/svelte";
 
     import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
 
     export let students;
+
+    let deleteForm = useForm();
+
+    const handleDelete = (student_id) => {
+        if (confirm("Are you sure you want to delete this student?")) {
+            $deleteForm.delete(route("students.destroy", student_id));
+        }
+    };
 </script>
 
 <AuthenticatedLayout>
@@ -135,6 +143,10 @@
                                                     </Link>
 
                                                     <button
+                                                        on:click={() =>
+                                                            handleDelete(
+                                                                student.id
+                                                            )}
                                                         class="ml-2 text-indigo-600 hover:text-indigo-900"
                                                     >
                                                         Delete
