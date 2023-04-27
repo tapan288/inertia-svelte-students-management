@@ -15,7 +15,9 @@ class StudentController extends Controller
     public function index()
     {
         return Inertia::render('Students/Index', [
-            'students' => StudentResource::collection(\App\Models\Student::all()),
+            'students' => StudentResource::collection(
+                \App\Models\Student::paginate()
+            ),
         ]);
     }
 
