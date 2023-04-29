@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'type' => fn () => $request->session()->get('type', 'success'),
             ],
+            'appName' => config('app.name'),
         ]);
     }
 }

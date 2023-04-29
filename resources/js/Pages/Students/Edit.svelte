@@ -3,6 +3,7 @@
     import { useForm, Link } from "@inertiajs/svelte";
 
     import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
+    import InputError from "@/Components/InputError.svelte";
 
     export let classes, student;
 
@@ -14,10 +15,12 @@
         phone_number: student.data.phone_number,
         class_id: student.data.class.id,
         section_id: student.data.section.id,
+        avatar: student.data.avatar,
+        _method: "PUT",
     });
 
     const submit = () => {
-        $form.put(route("students.update", student.data.id));
+        $form.post(route("students.update", student.data.id));
     };
 
     const getSections = (class_id) => {
@@ -110,6 +113,29 @@
                                             {$form.errors.phone_number}
                                         </div>
                                     {/if}
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-4">
+                                    {#if student.data.avatar}
+                                        <img
+                                            class="mb-5"
+                                            src={student.data.avatar}
+                                            alt=""
+                                            width="300px"
+                                        />
+                                    {/if}
+                                    <label
+                                        for="avatar"
+                                        class="block text-sm font-medium text-gray-700"
+                                        >Avatar</label
+                                    >
+                                    <input
+                                        type="file"
+                                        id="avatar"
+                                        bind:files={$form.avatar}
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                    <InputError message={$form.errors.avatar} />
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3">

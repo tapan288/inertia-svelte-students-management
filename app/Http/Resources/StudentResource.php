@@ -22,6 +22,7 @@ class StudentResource extends JsonResource
             'phone_number' => $this->phone_number,
             'class' => ClassResource::make($this->class),
             'section' => SectionResource::make($this->section),
+            'avatar' => $this?->getMedia()?->last()?->getUrl(),
         ];
     }
 }

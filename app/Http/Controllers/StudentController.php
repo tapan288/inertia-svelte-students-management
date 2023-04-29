@@ -32,7 +32,11 @@ class StudentController extends Controller
 
     public function store(StoreStudentRequest $request)
     {
-        Student::create($request->validated());
+        $student = Student::create($request->validated());
+
+        $student
+            ->addMedia($request->avatar[0])
+            ->toMediaCollection();
 
         return redirect()->route('students.index')
             ->with('message', 'Student created successfully');
@@ -50,6 +54,10 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student)
     {
         $student->update($request->validated());
+
+        $student
+            ->addMedia($request->avatar[0])
+            ->toMediaCollection();
 
         return redirect()->route('students.index')
             ->with('message', 'Student details updated successfully');
