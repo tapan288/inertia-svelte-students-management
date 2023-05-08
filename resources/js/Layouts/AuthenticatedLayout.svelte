@@ -44,6 +44,14 @@
                             >
                                 Students
                             </NavLink>
+                            <NavLink
+                                href={route("roles.index")}
+                                active={route().current("roles.index") ||
+                                    route().current("roles.create") ||
+                                    route().current("roles.edit")}
+                            >
+                                Roles
+                            </NavLink>
                         </div>
                     </div>
 
