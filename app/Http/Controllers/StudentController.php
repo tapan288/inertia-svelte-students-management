@@ -14,6 +14,8 @@ class StudentController extends Controller
 {
     public function index()
     {
+        $this->authorize('student_access');
+
         return Inertia::render('Students/Index', [
             'students' => StudentResource::collection(
                 \App\Models\Student::paginate()
@@ -23,6 +25,8 @@ class StudentController extends Controller
 
     public function create()
     {
+        $this->authorize('student_create');
+
         $classes = ClassResource::collection(\App\Models\Classes::all());
 
         return Inertia::render('Students/Create', [
@@ -32,6 +36,8 @@ class StudentController extends Controller
 
     public function store(StoreStudentRequest $request)
     {
+        $this->authorize('student_create');
+
         $student = Student::create($request->validated());
 
         $student
@@ -43,6 +49,8 @@ class StudentController extends Controller
     }
     public function edit(Student $student)
     {
+        $this->authorize('student_edit');
+
         $classes = ClassResource::collection(\App\Models\Classes::all());
 
         return Inertia::render('Students/Edit', [
@@ -53,6 +61,8 @@ class StudentController extends Controller
 
     public function update(UpdateStudentRequest $request, Student $student)
     {
+        $this->authorize('student_edit');
+
         $student->update($request->validated());
 
         $student
@@ -65,6 +75,8 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
+        $this->authorize('student_delete');
+
         $student->delete();
 
         return redirect()->route('students.index')
