@@ -1,12 +1,19 @@
 <script>
-    import axios from "axios";
     import { useForm, page, Link } from "@inertiajs/svelte";
 
+    import MultiSelect from "svelte-multiselect";
     import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
     import InputError from "@/Components/InputError.svelte";
 
+    export let permissions;
+
+    let items = permissions.data.map((item) => {
+        return { value: item.id, label: item.title };
+    });
+
     let form = useForm({
         title: null,
+        permissions: [],
     });
 
     function submit() {
@@ -54,6 +61,22 @@
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
                                     <InputError message={$form.errors.title} />
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label
+                                        for="permissions"
+                                        class="block text-sm font-medium text-gray-700"
+                                        >Permissions</label
+                                    >
+                                    <MultiSelect
+                                        bind:selected={$form.permissions}
+                                        options={items}
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-4 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                    <InputError
+                                        message={$form.errors.permissions}
+                                    />
                                 </div>
                             </div>
                         </div>

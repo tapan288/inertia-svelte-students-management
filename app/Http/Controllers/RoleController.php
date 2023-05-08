@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\RoleResource;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
+use App\Http\Resources\PermissionResource;
 
 class RoleController extends Controller
 {
@@ -22,12 +23,20 @@ class RoleController extends Controller
 
     public function create()
     {
-        return Inertia::render('Roles/Create');
+        return Inertia::render('Roles/Create', [
+            'permissions' => PermissionResource::collection(\App\Models\Permission::all()),
+        ]);
     }
 
     public function store(StoreRoleRequest $request)
     {
-        Role::create($request->validated());
+        $role = Role::create($request->validated());
+
+        $permissions = collect($request->permissions)->map(function ($permission) {
+            return $permission['value'];
+        });
+
+        $role->permissions()->sync($permissions);
 
         return redirect()->route('roles.index')
             ->with('message', 'Role created successfully');
