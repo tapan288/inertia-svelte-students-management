@@ -46,12 +46,19 @@ class RoleController extends Controller
     {
         return Inertia::render('Roles/Edit', [
             'role' => RoleResource::make($role),
+            'permissions' => PermissionResource::collection(\App\Models\Permission::all()),
         ]);
     }
 
     public function update(UpdateRoleRequest $request, Role $role)
     {
+        $permissions = collect($request->permissions)->map(function ($permission) {
+            return $permission['value'];
+        });
+
         $role->update($request->validated());
+
+        $role->permissions()->sync($permissions);
 
         return redirect()->route('roles.index')
             ->with('message', 'Role updated successfully');
