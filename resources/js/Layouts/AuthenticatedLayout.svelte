@@ -36,22 +36,26 @@
                             >
                                 Dashboard
                             </NavLink>
-                            <NavLink
-                                href={route("students.index")}
-                                active={route().current("students.index") ||
-                                    route().current("students.create") ||
-                                    route().current("students.edit")}
-                            >
-                                Students
-                            </NavLink>
-                            <NavLink
-                                href={route("roles.index")}
-                                active={route().current("roles.index") ||
-                                    route().current("roles.create") ||
-                                    route().current("roles.edit")}
-                            >
-                                Roles
-                            </NavLink>
+                            {#if $page.props.can.student_access}
+                                <NavLink
+                                    href={route("students.index")}
+                                    active={route().current("students.index") ||
+                                        route().current("students.create") ||
+                                        route().current("students.edit")}
+                                >
+                                    Students
+                                </NavLink>
+                            {/if}
+                            {#if $page.props.can.role_access}
+                                <NavLink
+                                    href={route("roles.index")}
+                                    active={route().current("roles.index") ||
+                                        route().current("roles.create") ||
+                                        route().current("roles.edit")}
+                                >
+                                    Roles
+                                </NavLink>
+                            {/if}
                         </div>
                     </div>
 

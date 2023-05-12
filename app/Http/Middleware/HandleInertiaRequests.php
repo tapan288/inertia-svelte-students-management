@@ -29,6 +29,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request?->user()?->loadMissing('roles.permissions');
+
+        if ($user) {
+            foreach ($user->roles as $role) {
+                foreach ($role->permissions as $singlePermission) {
+                    $permissionsArray[] = $singlePermission->title;
+                }
+            }
+
+            $permissionsCollection = collect($permissionsArray)->unique();
+        }
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -38,6 +50,9 @@ class HandleInertiaRequests extends Middleware
                 'type' => fn () => $request->session()->get('type', 'success'),
             ],
             'appName' => config('app.name'),
+            'can' => $user ? $permissionsCollection->map(function ($permission) {
+                return [$permission => true];
+            })->collapse()->all() : null,
         ]);
     }
 }
