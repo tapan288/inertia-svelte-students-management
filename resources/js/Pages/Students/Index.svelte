@@ -1,6 +1,14 @@
 <script>
     import { Link, useForm, page } from "@inertiajs/svelte";
 
+    import {
+        Button,
+        Dropdown,
+        DropdownItem,
+        DropdownDivider,
+        Chevron,
+    } from "flowbite-svelte";
+
     import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
     import AlertComponent from "@/Components/AlertComponent.svelte";
     import Pagination from "@/Components/Pagination.svelte";
@@ -42,6 +50,81 @@
                         {/if}
                     </div>
                 </div>
+
+                <div class="flex justify-between my-2">
+                    <div class="flex">
+                        <!-- pagination -->
+                        <div>
+                            <select
+                                id="per_page"
+                                name="per_page"
+                                class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            >
+                                <option>10</option>
+                                <option>20</option>
+                                <option>30</option>
+                            </select>
+                        </div>
+
+                        <!-- filter by class -->
+                        <div class="ml-4">
+                            <select
+                                id="filter_by_class"
+                                name="filter_by_class"
+                                class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            >
+                                <option value="">Select a Class</option>
+                                <option>Class 1</option>
+                                <option>Class 2</option>
+                            </select>
+                        </div>
+
+                        <!-- filter by section -->
+                        <div class="ml-4">
+                            <select
+                                id="filter_by_section"
+                                name="filter_by_section"
+                                class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            >
+                                <option value="">Select a Section</option>
+                                <option>Section A</option>
+                            </select>
+                        </div>
+
+                        <!-- checkbox -->
+                        <div class="ml-4 mt-2">
+                            <Button size="sm"
+                                ><Chevron>With Checked (10)</Chevron></Button
+                            >
+                            <Dropdown>
+                                <DropdownItem>Export</DropdownItem>
+                                <DropdownDivider />
+                                <DropdownItem>Delete</DropdownItem>
+                            </Dropdown>
+                        </div>
+                    </div>
+
+                    <!-- search -->
+                    <div class="mt-2 flex items-center">
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Enter Search Term"
+                            id="search"
+                            class="block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
+
+                <!-- currently selected info section -->
+                <div class="my-4">
+                    <div>
+                        You have selected <strong>10</strong> items, Do you want
+                        to Select All <strong>100</strong> items?
+                        <a href="#" class="ml-2">Select All</a>
+                    </div>
+                </div>
+
                 <div class="mt-8 flex flex-col">
                     <AlertComponent message={$page.props.flash.message} />
                     <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
