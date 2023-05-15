@@ -13,10 +13,11 @@
     import AlertComponent from "@/Components/AlertComponent.svelte";
     import Pagination from "@/Components/Pagination.svelte";
 
-    export let students;
+    export let students, classes;
 
     let pageSize = "10",
-        searchTerm = "";
+        searchTerm = "",
+        class_id = "";
 
     let deleteForm = useForm();
 
@@ -34,7 +35,8 @@
 
     $: studentsUrl =
         `/students?pageSize=${pageSize}` +
-        (searchTerm ? `&searchTerm=${searchTerm}` : "");
+        (searchTerm ? `&searchTerm=${searchTerm}` : "") +
+        (class_id ? `&class_id=${class_id}` : "");
     $: updatedStudentsUrl(studentsUrl);
 </script>
 
@@ -84,13 +86,17 @@
                         <!-- filter by class -->
                         <div class="ml-4">
                             <select
+                                bind:value={class_id}
                                 id="filter_by_class"
                                 name="filter_by_class"
                                 class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             >
                                 <option value="">Select a Class</option>
-                                <option>Class 1</option>
-                                <option>Class 2</option>
+                                {#each classes.data as item}
+                                    <option value={item.id}>
+                                        {item.name}
+                                    </option>
+                                {/each}
                             </select>
                         </div>
 

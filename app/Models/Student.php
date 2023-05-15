@@ -53,4 +53,12 @@ class Student extends Model implements HasMedia
                 });
         });
     }
+
+    public function scopeStudentQuery(Builder $query, $searchTerm, $class_id = null)
+    {
+        $query->search($searchTerm)
+            ->when($class_id, function ($query) use ($class_id) {
+                $query->where('class_id', $class_id);
+            });
+    }
 }
