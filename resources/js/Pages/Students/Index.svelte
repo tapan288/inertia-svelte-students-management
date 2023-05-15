@@ -17,6 +17,7 @@
     export let students, classes;
 
     let pageSize = "10",
+        pageNumber = 1,
         sections = [],
         searchTerm = "",
         class_id = "",
@@ -52,8 +53,13 @@
         }
     };
 
+    const updatedPageNumber = (page) => {
+        pageNumber = page;
+    };
+
     $: studentsUrl =
         `/students?pageSize=${pageSize}` +
+        (pageNumber ? `&page=${pageNumber}` : "") +
         (searchTerm ? `&searchTerm=${searchTerm}` : "") +
         (class_id ? `&class_id=${class_id}` : "") +
         (section_id ? `&section_id=${section_id}` : "");
@@ -314,7 +320,7 @@
                                 </table>
                             </div>
                         </div>
-                        <Pagination data={students} />
+                        <Pagination data={students} {updatedPageNumber} />
                     </div>
                 </div>
             </div>

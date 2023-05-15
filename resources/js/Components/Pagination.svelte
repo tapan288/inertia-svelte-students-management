@@ -1,7 +1,8 @@
 <script>
     import { Link } from "@inertiajs/svelte";
 
-    export let data;
+    export let data,
+        updatedPageNumber = () => {};
 </script>
 
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -37,17 +38,18 @@
                             aria-label="Pagination"
                         >
                             {#each data.meta.links as link}
-                                <Link
-                                    preserveScroll
-                                    as="button"
-                                    href={link.url}
+                                <button
+                                    on:click|preventDefault={() =>
+                                        updatedPageNumber(
+                                            link.url.split("=")[1]
+                                        )}
                                     disabled={link.active || !link.url}
                                     class="{link.active
                                         ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
                                         : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'}  relative inline-flex items-center px-4 py-2 border text-sm font-medium"
                                 >
                                     {@html link.label}
-                                </Link>
+                                </button>
                             {/each}
                         </nav>
                     </div>
