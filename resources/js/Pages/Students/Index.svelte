@@ -1,5 +1,5 @@
 <script>
-    import { Link, useForm, page } from "@inertiajs/svelte";
+    import { Link, useForm, page, router } from "@inertiajs/svelte";
 
     import {
         Button,
@@ -15,6 +15,8 @@
 
     export let students;
 
+    let pageSize = "10";
+
     let deleteForm = useForm();
 
     const handleDelete = (student_id) => {
@@ -22,6 +24,15 @@
             $deleteForm.delete(route("students.destroy", student_id));
         }
     };
+
+    const updatedStudentsUrl = (url) => {
+        router.visit(url, {
+            only: ["students"],
+        });
+    };
+
+    $: studentsUrl = `/students?pageSize=${pageSize}`;
+    $: updatedStudentsUrl(studentsUrl);
 </script>
 
 <AuthenticatedLayout>
@@ -56,6 +67,7 @@
                         <!-- pagination -->
                         <div>
                             <select
+                                bind:value={pageSize}
                                 id="per_page"
                                 name="per_page"
                                 class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"

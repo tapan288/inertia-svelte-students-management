@@ -12,13 +12,13 @@ use App\Http\Requests\UpdateStudentRequest;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('student_access');
 
         return Inertia::render('Students/Index', [
             'students' => StudentResource::collection(
-                \App\Models\Student::paginate()
+                \App\Models\Student::paginate($request->pageSize ?? 10)
             ),
         ]);
     }
