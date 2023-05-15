@@ -18,7 +18,8 @@ class StudentController extends Controller
 
         $studentsQuery = Student::studentQuery(
             searchTerm: trim($request->searchTerm ?? ''),
-            class_id: $request->class_id ?? null
+            class_id: $request->class_id ?? null,
+            section_id: $request->section_id ?? null,
         )
             ->paginate($request->pageSize ?? 10);
 

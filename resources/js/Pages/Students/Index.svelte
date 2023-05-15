@@ -1,4 +1,5 @@
 <script>
+    import axios from "axios";
     import { Link, useForm, page, router } from "@inertiajs/svelte";
 
     import {
@@ -16,8 +17,10 @@
     export let students, classes;
 
     let pageSize = "10",
+        sections = [],
         searchTerm = "",
-        class_id = "";
+        class_id = "",
+        section_id = "";
 
     let deleteForm = useForm();
 
@@ -33,11 +36,30 @@
         });
     };
 
+    const updatedClassId = (class_id) => {
+        if (class_id) {
+            axios
+                .get(route("sections.index"), {
+                    params: {
+                        class_id: class_id,
+                    },
+                })
+                .then((response) => {
+                    sections = response.data.data;
+                });
+        } else {
+            sections = [];
+        }
+    };
+
     $: studentsUrl =
         `/students?pageSize=${pageSize}` +
         (searchTerm ? `&searchTerm=${searchTerm}` : "") +
-        (class_id ? `&class_id=${class_id}` : "");
+        (class_id ? `&class_id=${class_id}` : "") +
+        (section_id ? `&section_id=${section_id}` : "");
+
     $: updatedStudentsUrl(studentsUrl);
+    $: updatedClassId(class_id);
 </script>
 
 <AuthenticatedLayout>
@@ -101,16 +123,23 @@
                         </div>
 
                         <!-- filter by section -->
-                        <div class="ml-4">
-                            <select
-                                id="filter_by_section"
-                                name="filter_by_section"
-                                class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            >
-                                <option value="">Select a Section</option>
-                                <option>Section A</option>
-                            </select>
-                        </div>
+                        {#if class_id}
+                            <div class="ml-4">
+                                <select
+                                    bind:value={section_id}
+                                    id="filter_by_section"
+                                    name="filter_by_section"
+                                    class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                >
+                                    <option value="">Select a Section</option>
+                                    {#each sections as item}
+                                        <option value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    {/each}
+                                </select>
+                            </div>
+                        {/if}
 
                         <!-- checkbox -->
                         <div class="ml-4 mt-2">
