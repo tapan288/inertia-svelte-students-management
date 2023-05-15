@@ -15,7 +15,8 @@
 
     export let students;
 
-    let pageSize = "10";
+    let pageSize = "10",
+        searchTerm = "";
 
     let deleteForm = useForm();
 
@@ -31,7 +32,9 @@
         });
     };
 
-    $: studentsUrl = `/students?pageSize=${pageSize}`;
+    $: studentsUrl =
+        `/students?pageSize=${pageSize}` +
+        (searchTerm ? `&searchTerm=${searchTerm}` : "");
     $: updatedStudentsUrl(studentsUrl);
 </script>
 
@@ -119,6 +122,7 @@
                     <!-- search -->
                     <div class="mt-2 flex items-center">
                         <input
+                            bind:value={searchTerm}
                             type="text"
                             name="search"
                             placeholder="Enter Search Term"

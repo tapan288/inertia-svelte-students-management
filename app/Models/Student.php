@@ -45,7 +45,6 @@ class Student extends Model implements HasMedia
             $query->where('name', 'like', $term)
                 ->orWhere('email', 'like', $term)
                 ->orWhere('phone_number', 'like', $term)
-                ->orWhere('address', 'like', $term)
                 ->orWhereHas('class', function ($query) use ($term) {
                     $query->where('name', 'like', $term);
                 })
@@ -53,34 +52,5 @@ class Student extends Model implements HasMedia
                     $query->where('name', 'like', $term);
                 });
         });
-    }
-
-    public function scopeStudentsQuery($query)
-    {
-        $search_term = request('q', '');
-
-        $selectedClass = request('selectedClass');
-        $selectedSection = request('selectedSection');
-
-        $sort_direction = request('sort_direction', 'asc');
-
-        if (!in_array($sort_direction, ['asc', 'desc'])) {
-            $sort_direction = 'asc';
-        }
-
-        $sort_field = request('sort_field', 'name');
-        if (!in_array($sort_field, ['name', 'email', 'address', 'phone_number', 'created_at'])) {
-            $sort_field = 'name';
-        }
-
-        $query->with(['class', 'section'])
-            ->when($selectedClass, function ($query) use ($selectedClass) {
-                $query->where('class_id', $selectedClass);
-            })
-            ->when($selectedSection, function ($query) use ($selectedSection) {
-                $query->where('section_id', $selectedSection);
-            })
-            ->orderBy($sort_field, $sort_direction)
-            ->search(trim($search_term));
     }
 }

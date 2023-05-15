@@ -16,10 +16,12 @@ class StudentController extends Controller
     {
         $this->authorize('student_access');
 
+        $students = StudentResource::collection(
+            \App\Models\Student::search(trim($request->searchTerm ?? ''))->paginate($request->pageSize ?? 10)
+        );
+
         return Inertia::render('Students/Index', [
-            'students' => StudentResource::collection(
-                \App\Models\Student::paginate($request->pageSize ?? 10)
-            ),
+            'students' => $students,
         ]);
     }
 
