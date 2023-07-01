@@ -19,15 +19,29 @@
     let pageSize = "10",
         pageNumber = 1,
         sections = [],
+        checked = [],
         searchTerm = "",
         class_id = "",
         section_id = "";
 
     let deleteForm = useForm();
+    let massDestroyForm = useForm();
 
     const handleDelete = (student_id) => {
         if (confirm("Are you sure you want to delete this student?")) {
             $deleteForm.delete(route("students.destroy", student_id));
+        }
+    };
+
+    const deleteMultipleRecords = () => {
+        if (confirm("Are you sure you want to delete these students?")) {
+            $massDestroyForm.delete(
+                route("students.massDestroy", { records: checked }),{
+                    onSuccess: () => {
+                        checked = [];
+                    },
+                }
+            );
         }
     };
 
@@ -148,16 +162,23 @@
                         {/if}
 
                         <!-- checkbox -->
-                        <div class="ml-4 mt-2">
-                            <Button size="sm"
-                                ><Chevron>With Checked (10)</Chevron></Button
-                            >
-                            <Dropdown>
-                                <DropdownItem>Export</DropdownItem>
-                                <DropdownDivider />
-                                <DropdownItem>Delete</DropdownItem>
-                            </Dropdown>
-                        </div>
+                        {#if checked.length > 0}
+                            <div class="ml-4 mt-2">
+                                <Button size="sm"
+                                    ><Chevron
+                                        >With Checked ({checked.length})</Chevron
+                                    ></Button
+                                >
+                                <Dropdown>
+                                    <DropdownItem>Export</DropdownItem>
+                                    <DropdownDivider />
+                                    <DropdownItem
+                                        on:click={deleteMultipleRecords}
+                                        >Delete</DropdownItem
+                                    >
+                                </Dropdown>
+                            </div>
+                        {/if}
                     </div>
 
                     <!-- search -->
@@ -196,6 +217,10 @@
                                 >
                                     <thead class="bg-gray-50">
                                         <tr>
+                                            <th
+                                                scope="col"
+                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                            />
                                             <th
                                                 scope="col"
                                                 class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
@@ -249,6 +274,18 @@
                                     >
                                         {#each students.data as student}
                                             <tr>
+                                                <td
+                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                                >
+                                                    <input
+                                                        value={student.id}
+                                                        bind:group={checked}
+                                                        type="checkbox"
+                                                        name=""
+                                                        id=""
+                                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                    />
+                                                </td>
                                                 <td
                                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                                 >

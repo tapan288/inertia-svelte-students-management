@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::delete('students/massDestroy', [\App\Http\Controllers\StudentController::class, 'massDestroy'])->name('students.massDestroy');
     Route::resource('students', \App\Http\Controllers\StudentController::class);
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
 });

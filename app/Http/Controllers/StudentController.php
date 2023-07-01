@@ -92,4 +92,14 @@ class StudentController extends Controller
         return redirect()->route('students.index')
             ->with('message', 'Student deleted successfully');
     }
+
+    public function massDestroy(Request $request)
+    {
+        $this->authorize('student_delete');
+
+        Student::whereIn('id', $request->records)->delete();
+
+        return redirect()->route('students.index')
+            ->with('message', 'Students deleted successfully');
+    }
 }
