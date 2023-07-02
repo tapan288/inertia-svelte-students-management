@@ -36,7 +36,8 @@
     const deleteMultipleRecords = () => {
         if (confirm("Are you sure you want to delete these students?")) {
             $massDestroyForm.delete(
-                route("students.massDestroy", { records: checked }),{
+                route("students.massDestroy", { records: checked }),
+                {
                     onSuccess: () => {
                         checked = [];
                     },
@@ -49,6 +50,12 @@
         router.visit(url, {
             only: ["students"],
         });
+    };
+
+    const updatedSectionId = (section_id) => {
+        if (section_id) {
+            updatedStudentsUrl(studentsUrl + `&section_id=${section_id}`);
+        }
     };
 
     const updatedClassId = (class_id) => {
@@ -75,11 +82,11 @@
         `/students?pageSize=${pageSize}` +
         (pageNumber ? `&page=${pageNumber}` : "") +
         (searchTerm ? `&searchTerm=${searchTerm}` : "") +
-        (class_id ? `&class_id=${class_id}` : "") +
-        (section_id ? `&section_id=${section_id}` : "");
+        (class_id ? `&class_id=${class_id}` : "");
 
     $: updatedStudentsUrl(studentsUrl);
     $: updatedClassId(class_id);
+    $: updatedSectionId(section_id);
 </script>
 
 <AuthenticatedLayout>
