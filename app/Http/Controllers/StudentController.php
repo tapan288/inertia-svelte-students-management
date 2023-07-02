@@ -21,11 +21,16 @@ class StudentController extends Controller
             searchTerm: trim($request->searchTerm ?? ''),
             class_id: $request->class_id ?? null,
             section_id: $request->section_id ?? null,
-        )
-            ->paginate($request->pageSize ?? 10);
+        );
+
+        if ($request->selectAll) {
+            return StudentResource::collection(
+                $studentsQuery->get()
+            );
+        }
 
         $students = StudentResource::collection(
-            $studentsQuery
+            $studentsQuery->paginate($request->pageSize ?? 10)
         );
 
         return Inertia::render('Students/Index', [

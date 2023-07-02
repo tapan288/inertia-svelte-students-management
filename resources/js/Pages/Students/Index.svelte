@@ -10,9 +10,9 @@
         Chevron,
     } from "flowbite-svelte";
 
-    import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
-    import AlertComponent from "@/Components/AlertComponent.svelte";
     import Pagination from "@/Components/Pagination.svelte";
+    import AlertComponent from "@/Components/AlertComponent.svelte";
+    import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.svelte";
 
     export let students, classes;
 
@@ -23,7 +23,8 @@
         searchTerm = "",
         class_id = "",
         section_id = "",
-        selectPage = false;
+        selectPage = false,
+        selectAll = false;
 
     let deleteForm = useForm();
     let massDestroyForm = useForm();
@@ -88,7 +89,15 @@
             checked = students.data.map((student) => student.id);
         } else {
             checked = [];
+            selectAll = false;
         }
+    };
+
+    const selectAllRecords = () => {
+        selectAll = true;
+        axios.get(studentsUrl + "&selectAll=" + selectAll).then((response) => {
+            checked = response.data.data.map((item) => item.id);
+        });
     };
 
     $: studentsUrl =
@@ -220,9 +229,17 @@
                 <!-- currently selected info section -->
                 <div class="my-4">
                     <div>
-                        You have selected <strong>10</strong> items, Do you want
-                        to Select All <strong>100</strong> items?
-                        <a href="#" class="ml-2">Select All</a>
+                        {#if selectAll}
+                            You are currently selecting all {checked.length} items.
+                        {:else if selectPage}
+                            You have selected <strong>{checked.length}</strong>
+                            items, Do you want to Select All
+                            <strong>{students.meta.total}</strong>
+                            items?
+                            <button on:click={selectAllRecords} class="ml-2"
+                                >Select All</button
+                            >
+                        {/if}
                     </div>
                 </div>
 
