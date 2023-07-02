@@ -46,6 +46,10 @@
         }
     };
 
+    const exportRecords = () => {
+        window.open(route("students.export", { records: checked }));
+    };
+
     const updatedStudentsUrl = (url) => {
         router.visit(url, {
             only: ["students"],
@@ -177,7 +181,9 @@
                                     ></Button
                                 >
                                 <Dropdown>
-                                    <DropdownItem>Export</DropdownItem>
+                                    <DropdownItem on:click={exportRecords}
+                                        >Export</DropdownItem
+                                    >
                                     <DropdownDivider />
                                     <DropdownItem
                                         on:click={deleteMultipleRecords}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Exports\StudentsExport;
 use App\Http\Resources\ClassResource;
 use App\Http\Resources\StudentResource;
 use App\Http\Requests\StoreStudentRequest;
@@ -101,5 +102,10 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')
             ->with('message', 'Students deleted successfully');
+    }
+
+    public function export(Request $request)
+    {
+        return (new StudentsExport($request->records))->download(now() . ' - students.xlsx');
     }
 }
