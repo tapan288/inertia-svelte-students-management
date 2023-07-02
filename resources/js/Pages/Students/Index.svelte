@@ -22,7 +22,8 @@
         checked = [],
         searchTerm = "",
         class_id = "",
-        section_id = "";
+        section_id = "",
+        selectPage = false;
 
     let deleteForm = useForm();
     let massDestroyForm = useForm();
@@ -82,6 +83,14 @@
         pageNumber = page;
     };
 
+    const updatedSelectPage = (selectPage) => {
+        if (selectPage) {
+            checked = students.data.map((student) => student.id);
+        } else {
+            checked = [];
+        }
+    };
+
     $: studentsUrl =
         `/students?pageSize=${pageSize}` +
         (pageNumber ? `&page=${pageNumber}` : "") +
@@ -91,6 +100,7 @@
     $: updatedStudentsUrl(studentsUrl);
     $: updatedClassId(class_id);
     $: updatedSectionId(section_id);
+    $: updatedSelectPage(selectPage);
 </script>
 
 <AuthenticatedLayout>
@@ -172,7 +182,7 @@
                             </div>
                         {/if}
 
-                        <!-- checkbox -->
+                        <!-- dropdown -->
                         {#if checked.length > 0}
                             <div class="ml-4 mt-2">
                                 <Button size="sm"
@@ -233,7 +243,15 @@
                                             <th
                                                 scope="col"
                                                 class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                            />
+                                            >
+                                                <input
+                                                    bind:checked={selectPage}
+                                                    type="checkbox"
+                                                    name=""
+                                                    id=""
+                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                />
+                                            </th>
                                             <th
                                                 scope="col"
                                                 class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
