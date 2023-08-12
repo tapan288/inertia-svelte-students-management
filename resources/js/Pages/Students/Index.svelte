@@ -31,7 +31,11 @@
 
     const handleDelete = (student_id) => {
         if (confirm("Are you sure you want to delete this student?")) {
-            $deleteForm.delete(route("students.destroy", student_id));
+            $deleteForm.delete(route("students.destroy", student_id),{
+                onSuccess: () => {
+                    checked = checked.filter((id) => id != student_id);
+                }
+            });
         }
     };
 
